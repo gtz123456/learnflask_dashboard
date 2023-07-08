@@ -105,9 +105,9 @@ def register():
             generateUser(email, password, 2)
 
         flash('Register succcess.')
-        return redirect(url_for('login'))
+        return redirect(url_for('login')) # TODO redirect to dashboard
     
-    return render_template('register.html') # TODO redirect to dashboard
+    return render_template('register.html') 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -124,8 +124,11 @@ def login():
             return redirect(url_for('login'))
 
         user = User.query.filter_by(email=email).first()
-
-        if email == user.username and user.validate_password(password):
+        if not user:
+            flash('Email not registered.')
+            return redirect(url_for('login'))
+        
+        if email == user.email and user.validate_password(password):
             login_user(user)
             flash('Login success.')
             return redirect(url_for('index'))
