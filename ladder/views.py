@@ -109,12 +109,12 @@ def logout():
     flash('Goodbye.')
     return redirect(url_for('index'))
 
-@app.route('/toturials')
-def toturials():
-    return render_template('toturials.html')
+@app.route('/tutorials')
+def tutorials():
+    return render_template('tutorials.html')
 
-@app.route('/toturials/ClashVerge')
-def toturials_ClashVerge():
+@app.route('/tutorials/ClashVerge')
+def tutorials_ClashVerge():
     return render_template('ClashVerge.html')
 
 @app.route('/toturials/V2rayNG')
