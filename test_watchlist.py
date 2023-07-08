@@ -1,6 +1,6 @@
 import unittest
 
-from watchlist import app, db
+from watchlist import ladder, db
 from watchlist.models import Movie, User
 from watchlist.commands import forge, initdb
 
@@ -8,7 +8,7 @@ from watchlist.commands import forge, initdb
 class WatchlistTestCase(unittest.TestCase):
 
     def setUp(self):
-        app.config.update(
+        ladder.config.update(
             TESTING=True,
             SQLALCHEMY_DATABASE_URI='sqlite:///:memory:'
         )
@@ -20,8 +20,8 @@ class WatchlistTestCase(unittest.TestCase):
         db.session.add_all([user, movie])
         db.session.commit()
 
-        self.client = app.test_client()
-        self.runner = app.test_cli_runner()
+        self.client = ladder.test_client()
+        self.runner = ladder.test_cli_runner()
 
     def tearDown(self):
         db.session.remove()
@@ -34,10 +34,10 @@ class WatchlistTestCase(unittest.TestCase):
         ), follow_redirects=True)
 
     def test_app_exist(self):
-        self.assertIsNotNone(app)
+        self.assertIsNotNone(ladder)
 
     def test_app_is_testing(self):
-        self.assertTrue(app.config['TESTING'])
+        self.assertTrue(ladder.config['TESTING'])
 
     def test_404_page(self):
         response = self.client.get('/nothing')
