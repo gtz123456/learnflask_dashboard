@@ -2,8 +2,9 @@ from flask import render_template, request, url_for, redirect, flash
 from flask_login import login_user, login_required, logout_user, current_user
 
 from ladder import app, db
-from ladder.models import User, Movie
+from ladder.models import User, Movie, generateUser
 
+import re
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -78,20 +79,53 @@ def settings():
 
     return render_template('settings.html')
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        refer = request.form['refer']
+
+        if not email:
+            flash('Empty email.')
+            return redirect(url_for('register'))
+        
+        if not password:
+            flash('Empty password.')
+            return redirect(url_for('register'))
+
+        pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+        if not re.match(pattern, email):
+            flash('Invalid input.')
+            return redirect(url_for('register'))
+
+        if refer:
+            generateUser(email, password, 2, referee=refer)
+        else:
+            generateUser(email, password, 2)
+
+        flash('Register succcess.')
+        return redirect(url_for('login'))
+    
+    return render_template('register.html') # TODO redirect to dashboard
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
+        email = request.form['email']
         password = request.form['password']
 
-        if not username or not password:
-            flash('Invalid input.')
+        if not email:
+            flash('Empty email.')
+            return redirect(url_for('login'))
+        
+        if not password:
+            flash('Empty password.')
             return redirect(url_for('login'))
 
-        user = User.query.first()
+        user = User.query.filter_by(email=email).first()
 
-        if username == user.username and user.validate_password(password):
+        if email == user.username and user.validate_password(password):
             login_user(user)
             flash('Login success.')
             return redirect(url_for('index'))
