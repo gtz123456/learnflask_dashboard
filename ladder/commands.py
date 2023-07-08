@@ -1,7 +1,7 @@
 import click
 
 from ladder import app, db
-from ladder.models import User, Movie
+from ladder.models import User, Movie, GiftCard, Service
 
 
 @app.cli.command()

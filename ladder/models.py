@@ -44,3 +44,14 @@ def generateUser(email, password, privilege, balance=0, referee=0):
     user.set_password(password)
     db.session.add(user)
     db.session.commit()
+
+
+
+
+
+
+
+class Movie(db.Model):  # 表名将会是 movie
+    id = db.Column(db.Integer, primary_key=True)  # 主键
+    title = db.Column(db.String(60))  # 电影标题
+    year = db.Column(db.String(4))  # 电影年份
