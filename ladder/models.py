@@ -30,6 +30,7 @@ class GiftCard(db.Model):
     amount = db.Column(db.Integer)
 
 class Service(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
     ServiceOwner = db.Column(db.Integer)
     ServiceType = db.Column(db.Integer)
     ServiceStartat = db.Column(db.DateTime)
