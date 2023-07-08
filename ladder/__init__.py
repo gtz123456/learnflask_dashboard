@@ -34,7 +34,7 @@ login_manager.login_view = 'login'
 
 @app.context_processor
 def inject_user():
-    from app.models import User
+    from ladder.models import User
     user = User.query.first()
     return dict(user=user)
 
