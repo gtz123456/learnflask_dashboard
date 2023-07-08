@@ -108,3 +108,15 @@ def logout():
     logout_user()
     flash('Goodbye.')
     return redirect(url_for('index'))
+
+@app.route('/toturials')
+def toturials():
+    return render_template('toturials.html')
+
+@app.route('/toturials/ClashVerge')
+def toturials_ClashVerge():
+    return render_template('ClashVerge.html')
+
+@app.route('/toturials/V2rayNG')
+def toturials_V2rayNG():
+    return render_template('V2rayNG.html')
