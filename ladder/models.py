@@ -5,7 +5,7 @@ from ladder import db
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(40))
+    email = db.Column(db.String(128))
     password_hash = db.Column(db.String(128))
     privilege = db.Column(db.Integer)
     balance = db.Column(db.Integer)
@@ -13,10 +13,15 @@ class User(db.Model, UserMixin):
 
     def setPassword(self, password):
         self.password_hash = generate_password_hash(password)
+        db.session.commit()
 
     def validatePassword(self, password):
         return check_password_hash(self.password_hash, password)
     
+    def setPrivilege(self, privilege):
+        self.privilege = privilege
+        db.session.commit()
+
     def getBalance(self):
         return self.balance
 
@@ -41,7 +46,7 @@ class Service(db.Model):
 
 def generateUser(email, password, privilege, balance=0, referee=0):
     user = User(email=email, privilege=privilege, balance=balance, referee=referee)
-    user.set_password(password)
+    user.setPassword(password)
     db.session.add(user)
     db.session.commit()
 

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{#  
 <p>{{ movies|length }} Titles</p>
 {% if current_user.is_authenticated %}
 <form method="post">
@@ -25,4 +26,5 @@
     {% endfor %}
 </ul>
 <img alt="Walking Totoro" class="totoro" src="{{ url_for('static', filename='images/totoro.gif') }}" title="to~to~ro~">
+#}
 {% endblock %}

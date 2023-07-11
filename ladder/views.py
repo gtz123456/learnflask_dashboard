@@ -2,7 +2,7 @@ from flask import render_template, request, url_for, redirect, flash
 from flask_login import login_user, login_required, logout_user, current_user
 
 from ladder import app, db
-from ladder.models import User, Movie, generateUser
+from ladder.models import User, GiftCard, Service, Movie, generateUser
 
 import re
 
@@ -65,16 +65,16 @@ def delete(movie_id):
 @login_required
 def settings():
     if request.method == 'POST':
-        name = request.form['name']
+        password = request.form['password']
 
-        if not name or len(name) > 20:
-            flash('Invalid input.')
+        if not password:
+            flash('Emptyv password.')
             return redirect(url_for('settings'))
 
         user = User.query.first()
-        user.name = name
-        db.session.commit()
-        flash('Settings updated.')
+        user.setPassword(password)
+
+        flash('Password updated.')
         return redirect(url_for('index'))
 
     return render_template('settings.html')
@@ -95,8 +95,8 @@ def register():
             return redirect(url_for('register'))
 
         pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
-        if not re.match(pattern, email):
-            flash('Invalid input.')
+        if len(email) > 128 or not re.match(pattern, email):
+            flash('Invalid email.')
             return redirect(url_for('register'))
 
         if refer:
@@ -128,7 +128,7 @@ def login():
             flash('Email not registered.')
             return redirect(url_for('login'))
         
-        if email == user.email and user.validate_password(password):
+        if email == user.email and user.validatePassword(password):
             login_user(user)
             flash('Login success.')
             return redirect(url_for('index'))
